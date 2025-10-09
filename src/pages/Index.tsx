@@ -21,9 +21,12 @@ import { toast } from "sonner";
 import { useHistoryManager } from "@/hooks/useHistoryManager";
 import { useTextareaState } from "@/hooks/useTextareaState";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useTranslation } from "@/contexts/LanguageContext";
+import { Language } from "@/i18n";
 
 const Index = () => {
   const { isAuthenticated } = useAuth();
+  const { language, setLanguage, t } = useTranslation();
 
   // Check if we're in shared view mode
   const urlParams = new URLSearchParams(window.location.search);
@@ -206,18 +209,11 @@ Happy editing! 🎉`;
 
   const [featuredImage, setFeaturedImage] = useState("");
   const [isProofreading, setIsProofreading] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
-    return localStorage.getItem('editorLanguage') || 'en';
-  });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const plainTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { savePosition: saveMarkdownPosition } = useTextareaState(textareaRef, markdownHistory.present);
   const { savePosition: savePlainTextPosition } = useTextareaState(plainTextareaRef, plainTextHistory.present);
-
-  useEffect(() => {
-    localStorage.setItem('editorLanguage', selectedLanguage);
-  }, [selectedLanguage]);
 
   useEffect(() => {
     const plainTextValue = markdownToPlainText(markdownHistory.present);
@@ -280,7 +276,7 @@ Happy editing! 🎉`;
   }, [markdownHistory]);
 
   const handleProofread = useCallback(async (variant?: 'US' | 'UK' | 'zh-CN' | 'zh-TW') => {
-    const proofreadVariant = variant || (selectedLanguage as 'US' | 'UK' | 'zh-CN' | 'zh-TW');
+    const proofreadVariant = variant || (language as 'US' | 'UK' | 'zh-CN' | 'zh-TW');
     const contentToProofread = proofreadVariant === 'US' || proofreadVariant === 'UK'
       ? plainTextHistory.present
       : markdownHistory.present;
@@ -319,7 +315,7 @@ Happy editing! 🎉`;
     } finally {
       setIsProofreading(false);
     }
-  }, [markdownHistory, plainTextHistory, selectedLanguage]);
+  }, [markdownHistory, plainTextHistory, language]);
 
   const renderMarkdown = useCallback(() => {
     const renderer = new Renderer();
@@ -390,11 +386,11 @@ Happy editing! 🎉`;
       <div className="container mx-auto py-8 px-4 max-w-6xl">
         <div className="bg-card rounded-xl shadow-2xl overflow-hidden border border-border">
           <div className="p-6 border-b border-border flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-foreground">Markdown Content Editor</h1>
+            <h1 className="text-2xl font-bold text-foreground">{t.app.title}</h1>
             <div className="flex gap-4 items-center">
               <LanguageSwitcher
-                selectedLanguage={selectedLanguage}
-                onLanguageChange={setSelectedLanguage}
+                selectedLanguage={language}
+                onLanguageChange={(lang) => setLanguage(lang as Language)}
               />
               <ThemeToggle />
 
@@ -424,13 +420,13 @@ Happy editing! 🎉`;
                 value="upload"
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
-                Upload Image
+                {t.tabs.uploadImage}
               </TabsTrigger>
               <TabsTrigger
                 value="generate"
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
-                Generate with AI
+                {t.tabs.generateWithAI}
               </TabsTrigger>
             </TabsList>
 
@@ -448,23 +444,23 @@ Happy editing! 🎉`;
           
           <Tabs defaultValue="rich" className="w-full">
             <TabsList className="w-full justify-start rounded-none border-b border-border bg-toolbar-bg px-6">
-              <TabsTrigger 
+              <TabsTrigger
                 value="rich"
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
-                Rich Text
+                {t.tabs.richText}
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="markdown"
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
-                Markdown Source
+                {t.tabs.markdownSource}
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="plain"
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
-                Plain Text
+                {t.tabs.plainText}
               </TabsTrigger>
             </TabsList>
             
@@ -503,7 +499,7 @@ Happy editing! 🎉`;
                 onRedo={plainTextHistory.redo}
                 canUndo={plainTextHistory.canUndo}
                 canRedo={plainTextHistory.canRedo}
-                currentLanguage={selectedLanguage}
+                currentLanguage={language}
               />
               <textarea
                 ref={plainTextareaRef}

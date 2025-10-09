@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Sparkles, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { usePollinationsImage } from "@/hooks/pollinations";
+import { useTranslation } from "@/contexts/LanguageContext";
 
 interface Message {
   role: "user" | "assistant";
@@ -17,16 +18,27 @@ interface ImageGenerationChatProps {
 }
 
 export const ImageGenerationChat = ({ onImageGenerated }: ImageGenerationChatProps) => {
+  const { t, language } = useTranslation();
+
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I can help you generate a custom 19:9 featured image for your blog post using Pollinations.ai. Just describe what you'd like to see, and I'll create it for you!"
+      content: t.imageGeneration.greeting
     }
   ]);
   const [input, setInput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { generateImage } = usePollinationsImage();
+
+  useEffect(() => {
+    setMessages([
+      {
+        role: "assistant",
+        content: t.imageGeneration.greeting
+      }
+    ]);
+  }, [language, t.imageGeneration.greeting]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -53,7 +65,7 @@ export const ImageGenerationChat = ({ onImageGenerated }: ImageGenerationChatPro
         ...prev,
         {
           role: "assistant",
-          content: "I've generated your image! Click 'Use This Image' to set it as your featured image.",
+          content: t.imageGeneration.successMessage,
           imageUrl: imageUrl
         }
       ]);
@@ -84,10 +96,10 @@ export const ImageGenerationChat = ({ onImageGenerated }: ImageGenerationChatPro
       <div className="p-4 border-b border-border bg-toolbar-bg">
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">AI Image Generation</h3>
+          <h3 className="font-semibold">{t.imageGeneration.title}</h3>
         </div>
         <p className="text-sm text-muted-foreground mt-1">
-          Powered by Pollinations.ai - Generate unique featured images
+          {t.imageGeneration.subtitle}
         </p>
       </div>
 
@@ -120,7 +132,7 @@ export const ImageGenerationChat = ({ onImageGenerated }: ImageGenerationChatPro
                       className="w-full"
                       variant="secondary"
                     >
-                      Use This Image
+                      {t.imageGeneration.useThisImage}
                     </Button>
                   </div>
                 )}
@@ -131,7 +143,7 @@ export const ImageGenerationChat = ({ onImageGenerated }: ImageGenerationChatPro
             <div className="flex justify-start">
               <div className="bg-muted rounded-lg p-4 flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span className="text-sm">Generating your image...</span>
+                <span className="text-sm">{t.imageGeneration.generating}</span>
               </div>
             </div>
           )}
@@ -141,7 +153,7 @@ export const ImageGenerationChat = ({ onImageGenerated }: ImageGenerationChatPro
       <div className="p-4 border-t border-border">
         <div className="flex gap-2">
           <Input
-            placeholder="Describe your featured image... (e.g., 'A sunset over mountains with vibrant colors')"
+            placeholder={t.imageGeneration.placeholder}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleGenerate()}
@@ -160,7 +172,7 @@ export const ImageGenerationChat = ({ onImageGenerated }: ImageGenerationChatPro
           </Button>
         </div>
         <p className="text-xs text-muted-foreground mt-2">
-          Try: "A minimalist tech workspace with warm lighting" or "Abstract digital art in blues and purples"
+          {t.imageGeneration.examplePrompts}
         </p>
       </div>
     </div>

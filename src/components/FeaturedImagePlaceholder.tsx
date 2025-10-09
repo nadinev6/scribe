@@ -2,16 +2,18 @@ import { ImagePlus, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useTranslation } from "@/contexts/LanguageContext";
 
 interface FeaturedImagePlaceholderProps {
   imageUrl?: string;
   onImageChange?: (url: string) => void;
 }
 
-export const FeaturedImagePlaceholder = ({ 
-  imageUrl, 
-  onImageChange 
+export const FeaturedImagePlaceholder = ({
+  imageUrl,
+  onImageChange
 }: FeaturedImagePlaceholderProps) => {
+  const { t } = useTranslation();
   const [urlInput, setUrlInput] = useState("");
   const [isDragging, setIsDragging] = useState(false);
 
@@ -85,7 +87,7 @@ export const FeaturedImagePlaceholder = ({
             </div>
             <div className="text-center space-y-1">
               <p className="text-lg font-semibold text-foreground">19:9 Featured Image</p>
-              <p className="text-sm text-muted-foreground">Drag and drop or choose a file</p>
+              <p className="text-sm text-muted-foreground">{t.featuredImage.dragDropText}</p>
             </div>
           </div>
 
@@ -103,7 +105,7 @@ export const FeaturedImagePlaceholder = ({
               <Button variant="secondary" size="lg" className="w-full font-medium shadow-sm hover:shadow-md transition-all" asChild>
                 <span>
                   <Upload className="h-5 w-5 mr-2" />
-                  Upload Image
+                  {t.featuredImage.uploadButton}
                 </span>
               </Button>
             </label>
