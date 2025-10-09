@@ -1,0 +1,147 @@
+import { useEffect, useState } from "react";
+import { marked, Renderer } from "marked";
+import { supabase } from "@/integrations/supabase/client";
+import { processTocInHtml } from "@/utils/tocUtils";
+import { stripComments } from "@/utils/commentUtils";
+
+interface SharedPost {
+  content: string;
+  featured_image: string | null;
+}
+
+export const SharedView = ({ shareId }: { shareId: string }) => {
+  const [post, setPost] = useState<SharedPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    loadSharedPost();
+
+    // Subscribe to realtime updates
+    const channel = supabase
+      .channel(`shared-post-${shareId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "shared_posts",
+          filter: `share_id=eq.${shareId}`,
+        },
+        (payload) => {
+          setPost(payload.new as SharedPost);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [shareId]);
+
+  const loadSharedPost = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("shared_posts")
+        .select("content, featured_image")
+        .eq("share_id", shareId)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!data) {
+        setError("Shared content not found");
+      } else {
+        setPost(data);
+      }
+    } catch (err) {
+      console.error("Error loading shared post:", err);
+      setError("Failed to load shared content");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderMarkdown = (markdown: string) => {
+    const renderer = new Renderer();
+
+    renderer.image = ({ href, title, text }: { href: string; title: string | null; text: string }) => {
+      if (href?.startsWith("llm-icon://")) {
+        const llmType = href.replace("llm-icon://", "");
+        // Return the actual image instead of placeholder
+        const iconConfig: Record<string, string> = {
+          gemini: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/gemini-color.png',
+          chatgpt: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/openai-color.png',
+          claude: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/claude-color.png',
+          perplexity: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/perplexity-color.png',
+          mistral: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/mistral-color.png',
+          groq: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/groq-color.png',
+          deepseek: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/deepseek-color.png',
+          ollama: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/ollama-color.png',
+          anthropic: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/anthropic-color.png',
+        };
+        const iconUrl = iconConfig[llmType];
+        if (iconUrl) {
+          return `<img src="${iconUrl}" alt="${text}" title="${text}" class="inline-block w-6 h-6 mx-1 align-middle" />`;
+        }
+      }
+      return `<img src="${href}" alt="${text}" title="${title || ""}" />`;
+    };
+
+    marked.setOptions({
+      gfm: true,
+      breaks: true,
+      renderer: renderer,
+    });
+
+    const markdownWithoutComments = stripComments(markdown);
+    let renderedHtml = marked(markdownWithoutComments) as string;
+    renderedHtml = processTocInHtml(renderedHtml);
+
+    return { __html: renderedHtml };
+  };
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen animated-gradient flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading shared content...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <div className="min-h-screen animated-gradient flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-destructive text-lg mb-2">{error || "Content not found"}</p>
+          <p className="text-muted-foreground">This link may be invalid or expired</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen animated-gradient">
+      <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="bg-card rounded-xl shadow-2xl overflow-hidden border border-border">
+          {post.featured_image && (
+            <div className="w-full overflow-hidden bg-muted">
+              <img
+                src={post.featured_image}
+                alt="Featured"
+                className="w-full aspect-[19/9] object-cover"
+              />
+            </div>
+          )}
+          <div className="p-8 prose max-w-none" style={{ lineHeight: '1.8' }}>
+            <div dangerouslySetInnerHTML={renderMarkdown(post.content)} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
