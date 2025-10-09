@@ -228,7 +228,7 @@ The Flash Proofreader uses AI to correct and improve your content:
 - **Language-Specific** - Click the dropdown arrow to select a specific proofreading variant (US English, UK English, Simplified Chinese, Traditional Chinese)
 - Returns corrected text with explanations for all changes
 - Works in Plain Text view for distraction-free editing
-- 
+
 <div align="center">
 <img src="./public/16shots_so.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
 </div>
