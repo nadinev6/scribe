@@ -241,22 +241,22 @@ Configure these env vars in `.env` (Vite will expose them via `import.meta.env`)
 - `VITE_GEMINI_API_KEY` - bearer token for the API (if required)
 
 Example request payload (JSON):
-`
-{
+
+`{
 	"model": "gemini-2.0-flash",
 	"language": "zh-CN",
 	"input": "待校对的中文文本",
 	"features": { "spell": true, "grammar": true, "style": true }
-}
-`
+}`
+
 Example response schema:
-`
-{
+
+`{
 	"original": "...",
 	"corrected": "...",
 	"suggestions": [ { "range": [start, end], "suggestion": "替换文本", "explanation": "说明" } ]
-}
-`
+}`
+
 Keep API keys out of source control. Do not commit `.env`.
 
 ## Project Structure
