@@ -223,14 +223,15 @@ The selected language:
 
 The Flash Proofreader uses AI to correct and improve your content:
 
-<div align="center">
-<img src="./public/16shots_so.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
-</div>
 
 - **Quick Proofread** - Click "Proofread & Fix" to use your currently selected language
 - **Language-Specific** - Click the dropdown arrow to select a specific proofreading variant (US English, UK English, Simplified Chinese, Traditional Chinese)
 - Returns corrected text with explanations for all changes
 - Works in Plain Text view for distraction-free editing
+- 
+<div align="center">
+<img src="./public/16shots_so.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
+</div>
 
 ### Gemini / LLM Proofreader API (env configuration)
 
@@ -240,22 +241,22 @@ Configure these env vars in `.env` (Vite will expose them via `import.meta.env`)
 - `VITE_GEMINI_API_KEY` - bearer token for the API (if required)
 
 Example request payload (JSON):
-
+`
 {
 	"model": "gemini-2.0-flash",
 	"language": "zh-CN",
 	"input": "待校对的中文文本",
 	"features": { "spell": true, "grammar": true, "style": true }
 }
-
+`
 Example response schema:
-
+`
 {
 	"original": "...",
 	"corrected": "...",
 	"suggestions": [ { "range": [start, end], "suggestion": "替换文本", "explanation": "说明" } ]
 }
-
+`
 Keep API keys out of source control. Do not commit `.env`.
 
 ## Project Structure
