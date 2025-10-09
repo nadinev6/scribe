@@ -12,7 +12,7 @@ Try Scribe now without installation:
 **[Launch Live Demo →](https://nadinev6.github.io/scribe/)**
 
 <div align="center">
-<img src="./public/107shots_so.png" alt="Scribe View" height="450" style="margin: 20px;">
+<img src="./public/650shots_so.png" alt="Scribe View" height="450" style="margin: 20px;">
 </div> 
 
 ## Overview
@@ -176,6 +176,10 @@ All export options automatically process table of contents placeholders, strip p
 
 ## Advanced Features
 
+<div align="center">
+<img src="./public/Screenshot-2.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
+</div>
+
 ### LLM Icon Integration
 
 Insert icons for popular AI models (ChatGPT, Claude, Gemini, etc.) directly into your markdown using the LLM Icons dropdown.
@@ -194,13 +198,14 @@ Access professional documentation tools:
 3. Choose from multiple image variations
 4. Select the perfect image for your content
 
+<div align="center">
+<img src="./public/107shots_so.png" alt="Scribe View" height="450" style="margin: 20px;">
+</div> 
+
 ## Language Support & Proofreading
 
 Scribe provides comprehensive multilingual support with a global language switcher and AI-powered proofreading.
 
-<div align="center">
-<img src="./public/Screenshot-2.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
-</div>
 
 ### Language Switcher
 
