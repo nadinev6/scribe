@@ -221,6 +221,10 @@ The selected language:
 
 ### AI Proofreader
 
+<div align="center">
+<img src="./public/16shots_so.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
+</div>
+
 The Flash Proofreader uses AI to correct and improve your content:
 - **Quick Proofread** - Click "Proofread & Fix" to use your currently selected language
 - **Language-Specific** - Click the dropdown arrow to select a specific proofreading variant (US English, UK English, Simplified Chinese, Traditional Chinese)
