@@ -1,2 +1,7 @@
-- name: Build 🏗️
-  run: npm run build 
+on:
+  push:
+    branches:
+      - main  
+  
+
+  workflow_dispatch:
