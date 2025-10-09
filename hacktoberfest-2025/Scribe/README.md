@@ -144,10 +144,35 @@ The production-ready files will be in the `dist` directory.
 
 ### Exporting Content
 
-Click the "More Actions" menu to export your content in multiple formats:
-- Markdown (.md)
-- HTML (.html)
-- Plain Text (.txt)
+Scribe offers powerful export options for different platforms and use cases. All exports require authentication.
+
+#### Quick File Exports
+
+Download your content as individual files:
+- **Markdown (.md)** - Export raw markdown with comments stripped and table of contents processed
+- **HTML (.html)** - Export fully rendered HTML with embedded styles, ready to view in any browser
+
+#### Platform Packages
+
+Create complete packages optimized for specific platforms:
+
+**Export for GitHub** - Download a ZIP package containing:
+- `README.md` - Your content formatted for GitHub with automatic badges and GitHub-flavored markdown
+- `images/` folder - All embedded images organized and ready to commit
+- Relative image paths automatically updated to reference the local images folder
+
+**Export for Dev.to** - Download a ZIP package containing:
+- `article.md` - Your content with Dev.to frontmatter (title, tags, cover image)
+- `images/` folder - All embedded images organized for upload
+- Frontmatter automatically generated from your document's first heading
+
+#### Copy to Clipboard
+
+Quickly copy formatted markdown for direct pasting:
+- **GitHub README** - Copies markdown formatted for GitHub with TOC and badges
+- **Dev.to Blog** - Copies markdown formatted for Dev.to with appropriate syntax
+
+All export options automatically process table of contents placeholders, strip private comments, and collect embedded images for platform packages.
 
 ## Advanced Features
 
@@ -169,14 +194,29 @@ Access professional documentation tools:
 3. Choose from multiple image variations
 4. Select the perfect image for your content
 
-## Chinese Text Editing & Gemini 2.0 Flash Proofreader
+## Language Support & Proofreading
 
-Scribe supports editing in Chinese (Simplified and Traditional) across all views (Rich Text, Markdown Source, Plain Text). The editor is IME-friendly and preserves correct composition/cursor behavior for CJK input. A new "Flash Proofreader" integration allows you to proofread text using a Gemini-like model with language set to `en`, `zh-CN`, or `zh-TW`.
+Scribe provides comprehensive multilingual support with a global language switcher and AI-powered proofreading.
 
-Usage notes:
-- UI: a language selector is available in the editor toolbar (English / 中文简体 / 中文繁體).
-- Proofreader: set the language to `zh-CN` or `zh-TW` when proofreading Chinese text.
-- The proofreader returns a corrected text and a list of suggestions (range + explanation).
+### Language Switcher
+
+A language selector is available in the main header (globe icon) with three options:
+- **English** - For English content editing and proofreading
+- **中文简体** (Simplified Chinese) - For Simplified Chinese content
+- **中文繁體** (Traditional Chinese) - For Traditional Chinese content
+
+The selected language:
+- Persists across browser sessions
+- Controls the default proofreading language
+- Works seamlessly with Chinese IME input across all editing modes
+
+### AI Proofreader
+
+The Flash Proofreader uses AI to correct and improve your content:
+- **Quick Proofread** - Click "Proofread & Fix" to use your currently selected language
+- **Language-Specific** - Click the dropdown arrow to select a specific proofreading variant (US English, UK English, Simplified Chinese, Traditional Chinese)
+- Returns corrected text with explanations for all changes
+- Works in Plain Text view for distraction-free editing
 
 ### Gemini / LLM Proofreader API (env configuration)
 
