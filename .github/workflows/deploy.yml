@@ -1,7 +1,35 @@
+# 1. NAME
+name: Deploy Scribe to GitHub Pages
+
+# 2. ON: Defines the trigger (what you provided)
 on:
   push:
     branches:
-      - main  
+      - main
   
-
+  # Allows manual running from the Actions tab
   workflow_dispatch:
+
+# 3. JOBS: Defines the tasks to be executed
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # 4. STEPS: The actions to perform (Checkout, Install, Build, Deploy)
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      # You need steps to set up Node.js, install dependencies, and run the build
+      # ... (Missing steps for setup, install, and build) ...
+
+      # Example of the crucial build step (must be included)
+      - name: Build with /scribe/ base path 🏗️
+        run: npm run build -- --base=/scribe/ 
+        
+      # Example of the deployment step (must be included)
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
