@@ -198,6 +198,10 @@ Access professional documentation tools:
 
 Scribe provides comprehensive multilingual support with a global language switcher and AI-powered proofreading.
 
+<div align="center">
+<img src="./public/Screenshot-2.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
+</div>
+
 ### Language Switcher
 
 A language selector is available in the main header (globe icon) with three options:
