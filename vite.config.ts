@@ -3,8 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 export default defineConfig(({ mode }) => ({
-  // CORRECTED FIX: Change the production base from "/scribe/" to "./"
-  base: mode === "production" ? "./" : "/",
+  base: mode === "production" ? "/scribe/" : "/",
   
   server: {
     host: "::",
