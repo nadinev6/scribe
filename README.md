@@ -199,7 +199,7 @@ Access professional documentation tools:
 4. Select the perfect image for your content
 
 <div align="center">
-<img src="./public/107shots_so.png" alt="Scribe View" height="450" style="margin: 20px;">
+<img src="./public/107shots_so.png" alt="Scribe View" alt="Scribe View" height="450" style="margin: 20px;">
 </div> 
 
 ## Language Support & Proofreading
