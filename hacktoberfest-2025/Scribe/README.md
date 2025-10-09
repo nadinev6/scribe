@@ -12,7 +12,7 @@ Try Scribe now without installation:
 **[Launch Live Demo →](https://nadinev6.github.io/scribe/)**
 
 <div align="center">
-<img src="./public/107shots_so.png" alt="Scribe View" height="450" style="margin: 20px;">
+<img src="./public/650shots_so.png" alt="Scribe View" height="450" style="margin: 20px;">
 </div> 
 
 ## Overview
@@ -176,6 +176,10 @@ All export options automatically process table of contents placeholders, strip p
 
 ## Advanced Features
 
+<div align="center">
+<img src="./public/Screenshot-2.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
+</div>
+
 ### LLM Icon Integration
 
 Insert icons for popular AI models (ChatGPT, Claude, Gemini, etc.) directly into your markdown using the LLM Icons dropdown.
@@ -194,9 +198,14 @@ Access professional documentation tools:
 3. Choose from multiple image variations
 4. Select the perfect image for your content
 
+<div align="center">
+<img src="./public/107shots_so.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
+</div>
+
 ## Language Support & Proofreading
 
 Scribe provides comprehensive multilingual support with a global language switcher and AI-powered proofreading.
+
 
 ### Language Switcher
 
@@ -213,10 +222,16 @@ The selected language:
 ### AI Proofreader
 
 The Flash Proofreader uses AI to correct and improve your content:
+
+
 - **Quick Proofread** - Click "Proofread & Fix" to use your currently selected language
 - **Language-Specific** - Click the dropdown arrow to select a specific proofreading variant (US English, UK English, Simplified Chinese, Traditional Chinese)
 - Returns corrected text with explanations for all changes
 - Works in Plain Text view for distraction-free editing
+
+<div align="center">
+<img src="./public/16shots_so.png" alt="Scribe Editor Interface" style="margin: 20px; max-width: 100%;">
+</div>
 
 ### Gemini / LLM Proofreader API (env configuration)
 
@@ -227,20 +242,20 @@ Configure these env vars in `.env` (Vite will expose them via `import.meta.env`)
 
 Example request payload (JSON):
 
-{
+`{
 	"model": "gemini-2.0-flash",
 	"language": "zh-CN",
 	"input": "待校对的中文文本",
 	"features": { "spell": true, "grammar": true, "style": true }
-}
+}`
 
 Example response schema:
 
-{
+`{
 	"original": "...",
 	"corrected": "...",
 	"suggestions": [ { "range": [start, end], "suggestion": "替换文本", "explanation": "说明" } ]
-}
+}`
 
 Keep API keys out of source control. Do not commit `.env`.
 
