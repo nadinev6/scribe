@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](/LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/nadinev6/multi-view-scribe?style=social)](https://github.com/nadinev6/multi-view-scribe)
 
-Scribe is a feature-rich markdown editor that allows you to seamlessly transitions between three distinct viewing modes while leveraging Pollinations.AI-powered image generation with content management features.
+Scribe is a feature-rich multilingual markdown editor that allows you to seamlessly transitions between three distinct viewing modes while leveraging Pollinations.AI-powered image generation with content management features.
 
 ## Live Demo
 
