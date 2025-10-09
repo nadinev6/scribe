@@ -12,7 +12,7 @@ Try Multi View Scribe now without installation:
 **[Launch Live Demo →](https://nadinev6.github.io/scribe/)**
 
 <div align="center">
-<img src="./public/107shots_so.png" alt="Multi Scribe View" height="450" style="margin: 20px;">
+<img src="./public/107shots_so.png" alt="Scribe View" height="450" style="margin: 20px;">
 </div> 
 
 ## Overview
@@ -236,14 +236,14 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 # Scribe
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/nadinev6/pollinations?style=social)](https://github.com/nadinev6/pollinations/tree/add/scribe-hacktoberfest-2025/hacktoberfest-2025/Scribe)
-
+[![GitHub Stars](https://img.shields.io/github/stars/nadinev6/scribe?style=social)](https://github.com/nadinev6/scribe)
 
 ## Links
 
-- **Project Location**: [https://github.com/nadinev6/pollinations/tree/add/scribe-hacktoberfest-2025/hacktoberfest-2025/Scribe](https://github.com/nadinev6/pollinations/tree/add/scribe-hacktoberfest-2025/hacktoberfest-2025/Scribe)
-- **Live Demo**: [https://nadinev6.github.io/pollinations/hacktoberfest-2025/Scribe](https://nadinev6.github.io/pollinations/hacktoberfest-2025/Scribe)
-- **Issues**: [https://github.com/nadinev6/pollinations/issues](https://github.com/nadinev6/pollinations/issues)
+- **Main Repository**: [https://github.com/nadinev6/scribe](https://github.com/nadinev6/scribe)
+- **Live Demo**: [https://nadinev6.github.io/scribe](https://github.com/nadinev6/scribe)
+- **Hacktoberfest Entry**: [pollinations/hacktoberfest-2025/Scribe](https://github.com/nadinev6/pollinations/tree/add/scribe-hacktoberfest-2025/hacktoberfest-2025/Scribe)
+- **Issues**: [https://github.com/nadinev6/scribe/issues](https://github.com/nadinev6/scribe/issues)
 
 #
 Made for Hacktoberfest 2025 🎃
