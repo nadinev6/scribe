@@ -1,0 +1,38 @@
+# .github/workflows/deploy.yml
+
+name: Deploy Scribe to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Only deploy when the main branch is updated
+  
+  # Allows manual triggering from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository 🛎️
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use Node.js version 20
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        run: npm install
+
+      # IMPORTANT FIX: Run the build with the specific base path for GitHub Pages
+      - name: Build with /scribe/ base path 🏗️
+        run: npm run build -- --base=/scribe/ 
+        
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # Assumes your Vite output directory is 'dist'
