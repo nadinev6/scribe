@@ -7,7 +7,7 @@ Scribe is a feature-rich markdown editor that allows you to seamlessly transitio
 
 ## Live Demo
 
-Try Multi View Scribe now without installation:
+Try Scribe now without installation:
 
 **[Launch Live Demo →](https://nadinev6.github.io/scribe/)**
 
