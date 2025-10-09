@@ -10,7 +10,7 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const basename = import.meta.env.MODE === "production" ? "/multi-view-scribe/" : "/";
+const basename = import.meta.env.MODE === "production" ? "/scribe/" : "/";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
