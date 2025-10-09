@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { marked, Renderer } from "marked";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FeaturedImagePlaceholder } from "@/components/FeaturedImagePlaceholder";
@@ -18,6 +18,8 @@ import { proofreadWithGemini } from "@/utils/geminiApi";
 import { stripComments } from "@/utils/commentUtils";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { useHistoryManager } from "@/hooks/useHistoryManager";
+import { useTextareaState } from "@/hooks/useTextareaState";
 
 const Index = () => {
   const { isAuthenticated } = useAuth();
@@ -31,7 +33,7 @@ const Index = () => {
     return <SharedView shareId={shareId} />;
   }
 
-  const [markdown, setMarkdown] = useState(`# Markdown Content Editor 
+  const initialMarkdown = `# Markdown Content Editor 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](/LICENSE) [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#) [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](#) [![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](#)
 
@@ -196,52 +198,65 @@ Separate sections with horizontal rules:
 5. **Generate images** with AI in the "Generate with AI" tab
 6. **Export** your content as Markdown, HTML, or plain text
 
-Happy editing! 🎉`);
-  
+Happy editing! 🎉`;
+
+  const markdownHistory = useHistoryManager(initialMarkdown);
+  const plainTextHistory = useHistoryManager("");
+
   const [featuredImage, setFeaturedImage] = useState("");
   const [isProofreading, setIsProofreading] = useState(false);
-  const [plainText, setPlainText] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const plainTextareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const { savePosition: saveMarkdownPosition } = useTextareaState(textareaRef, markdownHistory.present);
+  const { savePosition: savePlainTextPosition } = useTextareaState(plainTextareaRef, plainTextHistory.present);
+
   useEffect(() => {
-    setPlainText(markdownToPlainText(markdown));
-  }, [markdown]);
+    const plainTextValue = markdownToPlainText(markdownHistory.present);
+    plainTextHistory.updateHistory(plainTextValue);
+  }, [markdownHistory.present]);
 
-  const handlePlainTextChange = (newPlainText: string) => {
-    setPlainText(newPlainText);
-    setMarkdown(plainTextToMarkdown(newPlainText));
-  };
+  const handleMarkdownChange = useCallback((newMarkdown: string) => {
+    saveMarkdownPosition();
+    markdownHistory.updateHistory(newMarkdown);
+  }, [markdownHistory, saveMarkdownPosition]);
 
-  const handleFormatClick = (format: string) => {
+  const handlePlainTextChange = useCallback((newPlainText: string) => {
+    savePlainTextPosition();
+    plainTextHistory.updateHistory(newPlainText);
+    const correspondingMarkdown = plainTextToMarkdown(newPlainText);
+    markdownHistory.updateHistory(correspondingMarkdown);
+  }, [plainTextHistory, markdownHistory, savePlainTextPosition]);
+
+  const handleFormatClick = useCallback((format: string) => {
     if (!textareaRef.current) return;
-    
+
     const start = textareaRef.current.selectionStart;
     const end = textareaRef.current.selectionEnd;
-    
-    const { newText, newCursorPos } = insertMarkdownFormat(markdown, start, end, format);
-    setMarkdown(newText);
-    
+
+    const { newText, newCursorPos } = insertMarkdownFormat(markdownHistory.present, start, end, format);
+    markdownHistory.updateHistory(newText);
+
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
       }
     }, 0);
-  };
+  }, [markdownHistory, textareaRef]);
 
-  const handleEmojiSelect = (emoji: string) => {
+  const handleEmojiSelect = useCallback((emoji: string) => {
     if (!textareaRef.current) return;
-    
+
     const start = textareaRef.current.selectionStart;
     const end = textareaRef.current.selectionEnd;
-    
-    const before = markdown.substring(0, start);
-    const after = markdown.substring(end);
+
+    const before = markdownHistory.present.substring(0, start);
+    const after = markdownHistory.present.substring(end);
     const newText = before + emoji + after;
-    
-    setMarkdown(newText);
-    
+
+    markdownHistory.updateHistory(newText);
+
     setTimeout(() => {
       if (textareaRef.current) {
         const newPos = start + emoji.length;
@@ -249,25 +264,40 @@ Happy editing! 🎉`);
         textareaRef.current.setSelectionRange(newPos, newPos);
       }
     }, 0);
-  };
+  }, [markdownHistory, textareaRef]);
 
-  const handleRestore = (content: string, featuredImage?: string | null) => {
-    setMarkdown(content);
-    setFeaturedImage(featuredImage || "");
-  };
+  const handleRestore = useCallback((content: string, featuredImageUrl?: string | null) => {
+    markdownHistory.resetHistory(content);
+    setFeaturedImage(featuredImageUrl || "");
+  }, [markdownHistory]);
 
-  const handleProofread = async (variant: 'US' | 'UK') => {
-    if (!markdown.trim()) {
+  const handleProofread = useCallback(async (variant: 'US' | 'UK' | 'zh-CN' | 'zh-TW') => {
+    const contentToProofread = variant === 'US' || variant === 'UK'
+      ? plainTextHistory.present
+      : markdownHistory.present;
+
+    if (!contentToProofread.trim()) {
       toast.error('No content to proofread');
       return;
     }
 
     setIsProofreading(true);
-    toast.loading(`Proofreading with ${variant} English...`);
+    const languageLabel = variant === 'zh-CN' ? 'Simplified Chinese' :
+                          variant === 'zh-TW' ? 'Traditional Chinese' :
+                          `${variant} English`;
+    toast.loading(`Proofreading with ${languageLabel}...`);
 
     try {
-      const proofreadText = await proofreadWithGemini(markdown, variant);
-      setMarkdown(proofreadText);
+      const proofreadText = await proofreadWithGemini(contentToProofread, variant);
+
+      if (variant === 'US' || variant === 'UK') {
+        plainTextHistory.updateHistory(proofreadText);
+        const correspondingMarkdown = plainTextToMarkdown(proofreadText);
+        markdownHistory.updateHistory(correspondingMarkdown);
+      } else {
+        markdownHistory.updateHistory(proofreadText);
+      }
+
       toast.dismiss();
       toast.success('Proofreading Complete!');
     } catch (error) {
@@ -280,9 +310,9 @@ Happy editing! 🎉`);
     } finally {
       setIsProofreading(false);
     }
-  };
+  }, [markdownHistory, plainTextHistory]);
 
-  const renderMarkdown = () => {
+  const renderMarkdown = useCallback(() => {
     const renderer = new Renderer();
 
     renderer.image = ({ href, title, text }: { href: string; title: string | null; text: string }) => {
@@ -313,23 +343,39 @@ Happy editing! 🎉`);
       renderer: renderer,
     });
 
-    const markdownWithoutComments = stripComments(markdown);
+    const markdownWithoutComments = stripComments(markdownHistory.present);
     let renderedHtml = marked(markdownWithoutComments) as string;
     renderedHtml = processTocInHtml(renderedHtml);
 
     return renderedHtml;
-  };
+  }, [markdownHistory.present]);
 
-  const getRenderedHtml = () => {
+  const getRenderedHtml = useCallback(() => {
     return { __html: renderMarkdown() };
-  };
+  }, [renderMarkdown]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        markdownHistory.undo();
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        markdownHistory.redo();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [markdownHistory]);
 
   return (
     <div className="min-h-screen animated-gradient">
       {/* Collapsible History Panel */}
-      <CollapsibleHistoryPanel 
+      <CollapsibleHistoryPanel
         onRestore={handleRestore}
-        currentContent={markdown}
+        currentContent={markdownHistory.present}
       />
 
       <div className="container mx-auto py-8 px-4 max-w-6xl">
@@ -341,9 +387,9 @@ Happy editing! 🎉`);
 
               {isAuthenticated && (
                 <div className="flex gap-2 items-center">
-                  <ShareDialog markdown={markdown} featuredImage={featuredImage} />
+                  <ShareDialog markdown={markdownHistory.present} featuredImage={featuredImage} />
                   <MoreActionsDropdown
-                    markdown={markdown}
+                    markdown={markdownHistory.present}
                     featuredImage={featuredImage}
                     htmlContent={renderMarkdown()}
                   />
@@ -419,11 +465,15 @@ Happy editing! 🎉`);
               <EditorToolbarWithActions
                 onFormatClick={handleFormatClick}
                 onEmojiSelect={handleEmojiSelect}
+                onUndo={markdownHistory.undo}
+                onRedo={markdownHistory.redo}
+                canUndo={markdownHistory.canUndo}
+                canRedo={markdownHistory.canRedo}
               />
               <textarea
                 ref={textareaRef}
-                value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
+                value={markdownHistory.present}
+                onChange={(e) => handleMarkdownChange(e.target.value)}
                 className="w-full min-h-[500px] p-8 bg-editor-bg text-foreground font-mono text-sm resize-none focus:outline-none"
                 spellCheck={false}
               />
@@ -433,13 +483,17 @@ Happy editing! 🎉`);
               <PlainTextToolbar
                 onProofread={handleProofread}
                 isProofreading={isProofreading}
-                plainText={plainText}
+                plainText={plainTextHistory.present}
                 onPlainTextChange={handlePlainTextChange}
                 textareaRef={plainTextareaRef}
+                onUndo={plainTextHistory.undo}
+                onRedo={plainTextHistory.redo}
+                canUndo={plainTextHistory.canUndo}
+                canRedo={plainTextHistory.canRedo}
               />
               <textarea
                 ref={plainTextareaRef}
-                value={plainText}
+                value={plainTextHistory.present}
                 onChange={(e) => handlePlainTextChange(e.target.value)}
                 className="w-full min-h-[500px] p-8 bg-editor-bg text-foreground font-mono text-sm resize-none focus:outline-none"
                 spellCheck={false}

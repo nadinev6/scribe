@@ -44,7 +44,7 @@ All colors MUST be HSL.
     --gradient-start: 0 0% 98%;
     --gradient-mid: 6 100% 94%;
     --gradient-end: 0 79% 72%;
-    /* GitHub-like neutral palette (light) - all HSL tokens */
+
     --gh-gray-50: 0 0% 98%;
     --gh-gray-100: 0 0% 96%;
     --gh-gray-200: 0 0% 92%;
@@ -53,6 +53,9 @@ All colors MUST be HSL.
     --gh-gray-500: 0 0% 56%;
     --gh-gray-600: 0 0% 40%;
     --gh-gray-700: 0 0% 15%;
+
+    --toc-link-blue: 210 100% 45%;
+    --toc-link-blue-hover: 210 100% 35%;
   }
 
   .dark {
@@ -90,8 +93,8 @@ All colors MUST be HSL.
     --gradient-start: 0 0% 10%;
     --gradient-mid: 0 0% 14%;
     --gradient-end: 0 79% 25%;
-    /* GitHub-like neutral palette (dark) */
-    --gh-gray-50: 0 0% 98%; /* unused in dark but kept */
+
+    --gh-gray-50: 0 0% 98%;
     --gh-gray-100: 0 0% 12%;
     --gh-gray-200: 0 0% 18%;
     --gh-gray-300: 0 0% 24%;
@@ -99,6 +102,9 @@ All colors MUST be HSL.
     --gh-gray-500: 0 0% 56%;
     --gh-gray-600: 0 0% 75%;
     --gh-gray-700: 0 0% 95%;
+
+    --toc-link-blue: 210 100% 60%;
+    --toc-link-blue-hover: 210 100% 70%;
   }
 }
 
@@ -173,14 +179,22 @@ All colors MUST be HSL.
   }
 
   .toc-link {
-    color: hsl(var(--gh-gray-600));
+    color: hsl(var(--toc-link-blue)) !important;
     text-decoration: none;
     transition: color 0.2s ease;
   }
 
   .toc-link:hover {
-    color: hsl(var(--gh-gray-700));
+    color: hsl(var(--toc-link-blue-hover)) !important;
     text-decoration: underline;
+  }
+
+  .table-of-contents a.toc-link {
+    color: hsl(var(--toc-link-blue)) !important;
+  }
+
+  .table-of-contents a.toc-link:hover {
+    color: hsl(var(--toc-link-blue-hover)) !important;
   }
 
   .toc-placeholder {

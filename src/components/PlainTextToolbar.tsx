@@ -5,15 +5,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sparkles, MessageSquare } from "lucide-react";
+import { Sparkles, MessageSquare, Undo2, Redo2 } from "lucide-react";
 import { RefObject } from "react";
 
 interface PlainTextToolbarProps {
-  onProofread: (variant: 'US' | 'UK') => void;
+  onProofread: (variant: 'US' | 'UK' | 'zh-CN' | 'zh-TW') => void;
   isProofreading: boolean;
   plainText: string;
   onPlainTextChange: (text: string) => void;
   textareaRef: RefObject<HTMLTextAreaElement>;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
 }
 
 export const PlainTextToolbar = ({
@@ -21,7 +25,11 @@ export const PlainTextToolbar = ({
   isProofreading,
   plainText,
   onPlainTextChange,
-  textareaRef
+  textareaRef,
+  onUndo,
+  onRedo,
+  canUndo = false,
+  canRedo = false
 }: PlainTextToolbarProps) => {
   const handleCommentClick = () => {
     if (!textareaRef.current) return;
@@ -58,6 +66,30 @@ export const PlainTextToolbar = ({
 
   return (
     <div className="flex flex-wrap gap-1 p-2 bg-toolbar-bg border-b border-border">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onUndo}
+        disabled={!canUndo}
+        className="hover:bg-primary/10 hover:text-primary"
+        title="Undo (Ctrl+Z)"
+      >
+        <Undo2 className="h-4 w-4" />
+      </Button>
+
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onRedo}
+        disabled={!canRedo}
+        className="hover:bg-primary/10 hover:text-primary"
+        title="Redo (Ctrl+Y)"
+      >
+        <Redo2 className="h-4 w-4" />
+      </Button>
+
+      <div className="w-px h-6 bg-border mx-1" />
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -76,6 +108,12 @@ export const PlainTextToolbar = ({
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onProofread('UK')}>
             UK English
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onProofread('zh-CN')}>
+            Simplified Chinese (简体中文)
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onProofread('zh-TW')}>
+            Traditional Chinese (繁體中文)
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

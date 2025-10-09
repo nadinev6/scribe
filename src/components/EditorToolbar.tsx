@@ -24,16 +24,46 @@ import {
   Cpu,
   ChevronDown,
   AlignCenter,
-  MessageSquare
+  MessageSquare,
+  Undo2,
+  Redo2,
 } from "lucide-react";
 
 interface EditorToolbarProps {
   onFormatClick: (format: string) => void;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
 }
 
-export const EditorToolbar = ({ onFormatClick }: EditorToolbarProps) => {
+export const EditorToolbar = ({ onFormatClick, onUndo, onRedo, canUndo = false, canRedo = false }: EditorToolbarProps) => {
   return (
     <div className="flex flex-wrap gap-1 p-2 bg-toolbar-bg border-b border-border">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onUndo}
+        disabled={!canUndo}
+        className="hover:bg-primary/10 hover:text-primary"
+        title="Undo (Ctrl+Z)"
+      >
+        <Undo2 className="h-4 w-4" />
+      </Button>
+
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onRedo}
+        disabled={!canRedo}
+        className="hover:bg-primary/10 hover:text-primary"
+        title="Redo (Ctrl+Y)"
+      >
+        <Redo2 className="h-4 w-4" />
+      </Button>
+
+      <div className="w-px h-6 bg-border mx-1" />
+
       <Button 
         variant="ghost" 
         size="sm"

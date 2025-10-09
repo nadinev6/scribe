@@ -15,11 +15,19 @@ import { useToast } from "@/hooks/use-toast";
 interface EditorToolbarWithActionsProps {
   onFormatClick: (format: string) => void;
   onEmojiSelect: (emoji: string) => void;
+  onUndo?: () => void;
+  onRedo?: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
 }
 
 export const EditorToolbarWithActions = ({
   onFormatClick,
-  onEmojiSelect
+  onEmojiSelect,
+  onUndo,
+  onRedo,
+  canUndo,
+  canRedo
 }: EditorToolbarWithActionsProps) => {
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
@@ -37,7 +45,13 @@ export const EditorToolbarWithActions = ({
   return (
     <div className="flex items-center justify-between gap-2 p-2 bg-toolbar-bg border-b border-border">
       <div className="flex items-center gap-1 flex-wrap flex-1">
-        <EditorToolbar onFormatClick={onFormatClick} />
+        <EditorToolbar
+          onFormatClick={onFormatClick}
+          onUndo={onUndo}
+          onRedo={onRedo}
+          canUndo={canUndo}
+          canRedo={canRedo}
+        />
       </div>
 
       <div className="flex items-center gap-1">
