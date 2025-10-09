@@ -9,7 +9,7 @@ import { Sparkles, MessageSquare, Undo2, Redo2 } from "lucide-react";
 import { RefObject } from "react";
 
 interface PlainTextToolbarProps {
-  onProofread: (variant: 'US' | 'UK' | 'zh-CN' | 'zh-TW') => void;
+  onProofread: (variant?: 'US' | 'UK' | 'zh-CN' | 'zh-TW') => void;
   isProofreading: boolean;
   plainText: string;
   onPlainTextChange: (text: string) => void;
@@ -18,6 +18,7 @@ interface PlainTextToolbarProps {
   onRedo?: () => void;
   canUndo?: boolean;
   canRedo?: boolean;
+  currentLanguage?: string;
 }
 
 export const PlainTextToolbar = ({
@@ -29,7 +30,8 @@ export const PlainTextToolbar = ({
   onUndo,
   onRedo,
   canUndo = false,
-  canRedo = false
+  canRedo = false,
+  currentLanguage = 'en'
 }: PlainTextToolbarProps) => {
   const handleCommentClick = () => {
     if (!textareaRef.current) return;
@@ -90,16 +92,28 @@ export const PlainTextToolbar = ({
 
       <div className="w-px h-6 bg-border mx-1" />
 
+      <Button
+        variant="default"
+        size="sm"
+        disabled={isProofreading}
+        className="bg-primary hover:bg-primary/90 text-primary-foreground"
+        onClick={() => onProofread()}
+        title={`Proofread with current language (${currentLanguage})`}
+      >
+        <Sparkles className="h-4 w-4 mr-2" />
+        {isProofreading ? 'Proofreading...' : 'Proofread & Fix'}
+      </Button>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="default"
+            variant="ghost"
             size="sm"
             disabled={isProofreading}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            className="hover:bg-primary/10 hover:text-primary"
+            title="Choose specific language for proofreading"
           >
-            <Sparkles className="h-4 w-4 mr-2" />
-            {isProofreading ? 'Proofreading...' : 'Proofread & Fix'}
+            <Sparkles className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

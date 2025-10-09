@@ -20,6 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { useHistoryManager } from "@/hooks/useHistoryManager";
 import { useTextareaState } from "@/hooks/useTextareaState";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const Index = () => {
   const { isAuthenticated } = useAuth();
@@ -205,11 +206,18 @@ Happy editing! 🎉`;
 
   const [featuredImage, setFeaturedImage] = useState("");
   const [isProofreading, setIsProofreading] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
+    return localStorage.getItem('editorLanguage') || 'en';
+  });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const plainTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { savePosition: saveMarkdownPosition } = useTextareaState(textareaRef, markdownHistory.present);
   const { savePosition: savePlainTextPosition } = useTextareaState(plainTextareaRef, plainTextHistory.present);
+
+  useEffect(() => {
+    localStorage.setItem('editorLanguage', selectedLanguage);
+  }, [selectedLanguage]);
 
   useEffect(() => {
     const plainTextValue = markdownToPlainText(markdownHistory.present);
@@ -271,8 +279,9 @@ Happy editing! 🎉`;
     setFeaturedImage(featuredImageUrl || "");
   }, [markdownHistory]);
 
-  const handleProofread = useCallback(async (variant: 'US' | 'UK' | 'zh-CN' | 'zh-TW') => {
-    const contentToProofread = variant === 'US' || variant === 'UK'
+  const handleProofread = useCallback(async (variant?: 'US' | 'UK' | 'zh-CN' | 'zh-TW') => {
+    const proofreadVariant = variant || (selectedLanguage as 'US' | 'UK' | 'zh-CN' | 'zh-TW');
+    const contentToProofread = proofreadVariant === 'US' || proofreadVariant === 'UK'
       ? plainTextHistory.present
       : markdownHistory.present;
 
@@ -282,15 +291,15 @@ Happy editing! 🎉`;
     }
 
     setIsProofreading(true);
-    const languageLabel = variant === 'zh-CN' ? 'Simplified Chinese' :
-                          variant === 'zh-TW' ? 'Traditional Chinese' :
-                          `${variant} English`;
+    const languageLabel = proofreadVariant === 'zh-CN' ? 'Simplified Chinese' :
+                          proofreadVariant === 'zh-TW' ? 'Traditional Chinese' :
+                          `${proofreadVariant} English`;
     toast.loading(`Proofreading with ${languageLabel}...`);
 
     try {
-      const proofreadText = await proofreadWithGemini(contentToProofread, variant);
+      const proofreadText = await proofreadWithGemini(contentToProofread, proofreadVariant);
 
-      if (variant === 'US' || variant === 'UK') {
+      if (proofreadVariant === 'US' || proofreadVariant === 'UK') {
         plainTextHistory.updateHistory(proofreadText);
         const correspondingMarkdown = plainTextToMarkdown(proofreadText);
         markdownHistory.updateHistory(correspondingMarkdown);
@@ -310,7 +319,7 @@ Happy editing! 🎉`;
     } finally {
       setIsProofreading(false);
     }
-  }, [markdownHistory, plainTextHistory]);
+  }, [markdownHistory, plainTextHistory, selectedLanguage]);
 
   const renderMarkdown = useCallback(() => {
     const renderer = new Renderer();
@@ -383,6 +392,10 @@ Happy editing! 🎉`;
           <div className="p-6 border-b border-border flex items-center justify-between">
             <h1 className="text-2xl font-bold text-foreground">Markdown Content Editor</h1>
             <div className="flex gap-4 items-center">
+              <LanguageSwitcher
+                selectedLanguage={selectedLanguage}
+                onLanguageChange={setSelectedLanguage}
+              />
               <ThemeToggle />
 
               {isAuthenticated && (
@@ -490,6 +503,7 @@ Happy editing! 🎉`;
                 onRedo={plainTextHistory.redo}
                 canUndo={plainTextHistory.canUndo}
                 canRedo={plainTextHistory.canRedo}
+                currentLanguage={selectedLanguage}
               />
               <textarea
                 ref={plainTextareaRef}
