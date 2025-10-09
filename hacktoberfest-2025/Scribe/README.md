@@ -97,7 +97,7 @@ cd pollinations/hacktoberfest-2025/Scribe
 
 2. Navigate to the project directory:
 ```bash
-cd multi-view-scribe
+cd scribe
 ```
 
 3. Install dependencies:
