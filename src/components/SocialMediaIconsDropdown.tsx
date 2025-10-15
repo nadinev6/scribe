@@ -152,9 +152,9 @@ export const SocialMediaIconsDropdown = ({ onFormatClick }: SocialMediaIconsDrop
               className="text-foreground hover:bg-accent cursor-pointer"
             >
               {platform.icon === "lucide:mail" ? (
-                <Mail className="w-4 h-4 mr-2" />
+                <span className="mr-2">📧</span>
               ) : platform.icon === "lucide:globe" ? (
-                <Globe className="w-4 h-4 mr-2" />
+                <span className="mr-2">🌐</span>
               ) : (
                 <img
                   src={platform.icon}

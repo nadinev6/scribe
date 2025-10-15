@@ -94,11 +94,14 @@ export const SharedView = ({ shareId }: { shareId: string }) => {
           youtube: 'https://www.youtube.com/s/desktop/d743f786/img/favicon_144x144.png',
           linkedin: 'https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca',
           instagram: 'https://static.cdninstagram.com/rsrc.php/v3/yt/r/30PrGfR3xhB.png',
-          email: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Crect width="20" height="16" x="2" y="4" rx="2"/%3E%3Cpath d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/%3E%3C/svg%3E',
-          website: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3Cpath d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/%3E%3Cpath d="M2 12h20"/%3E%3C/svg%3E',
+          email: '📧',
+          website: '🌐',
         };
         const iconUrl = socialIconConfig[platformId];
         if (iconUrl) {
+          if (platformId === 'email' || platformId === 'website') {
+            return `<span class="inline-block mx-1 align-middle" title="${text}">${iconUrl}</span>`;
+          }
           return `<img src="${iconUrl}" alt="${text}" title="${text}" class="inline-block w-5 h-5 mx-1 align-middle" />`;
         }
       }
