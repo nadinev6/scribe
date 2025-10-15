@@ -163,6 +163,86 @@ export const insertMarkdownFormat = (
       insert = `[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](#)`;
       cursorOffset = insert.length;
       break;
+    case 'badge-react':
+      insert = `![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-typescript':
+      insert = `![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-javascript':
+      insert = `![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-vite':
+      insert = `![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-tailwind':
+      insert = `![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-nodejs':
+      insert = `![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-vue':
+      insert = `![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat&logo=vue.js&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-angular':
+      insert = `![Angular](https://img.shields.io/badge/Angular-DD0031?style=flat&logo=angular&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-svelte':
+      insert = `![Svelte](https://img.shields.io/badge/Svelte-FF3E00?style=flat&logo=svelte&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-nextjs':
+      insert = `![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-webpack':
+      insert = `![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=flat&logo=webpack&logoColor=black)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-npm':
+      insert = `![npm](https://img.shields.io/badge/npm-CB3837?style=flat&logo=npm&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-yarn':
+      insert = `![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?style=flat&logo=yarn&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-pnpm':
+      insert = `![pnpm](https://img.shields.io/badge/pnpm-F69220?style=flat&logo=pnpm&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-supabase':
+      insert = `![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat&logo=supabase&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-postgresql':
+      insert = `![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-mongodb':
+      insert = `![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-express':
+      insert = `![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-bootstrap':
+      insert = `![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=flat&logo=bootstrap&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
+    case 'badge-sass':
+      insert = `![Sass](https://img.shields.io/badge/Sass-CC6699?style=flat&logo=sass&logoColor=white)`;
+      cursorOffset = insert.length;
+      break;
     case 'center':
       if (selected) {
         insert = `<div align="center">\n${selected}\n</div>`;
