@@ -68,7 +68,6 @@ export const SharedView = ({ shareId }: { shareId: string }) => {
     renderer.image = ({ href, title, text }: { href: string; title: string | null; text: string }) => {
       if (href?.startsWith("llm-icon://")) {
         const llmType = href.replace("llm-icon://", "");
-        // Return the actual image instead of placeholder
         const iconConfig: Record<string, string> = {
           gemini: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/gemini-color.png',
           chatgpt: 'https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/openai-color.png',
@@ -85,6 +84,25 @@ export const SharedView = ({ shareId }: { shareId: string }) => {
           return `<img src="${iconUrl}" alt="${text}" title="${text}" class="inline-block w-6 h-6 mx-1 align-middle" />`;
         }
       }
+
+      if (href?.startsWith('social-icon://')) {
+        const platformId = href.replace('social-icon://', '');
+        const socialIconConfig: Record<string, string> = {
+          x: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg',
+          discord: 'https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0a6ca814282eca7172c6_icon_clyde_white_RGB.svg',
+          dev: 'https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png',
+          youtube: 'https://www.youtube.com/s/desktop/d743f786/img/favicon_144x144.png',
+          linkedin: 'https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca',
+          instagram: 'https://static.cdninstagram.com/rsrc.php/v3/yt/r/30PrGfR3xhB.png',
+          email: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Crect width="20" height="16" x="2" y="4" rx="2"/%3E%3Cpath d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/%3E%3C/svg%3E',
+          website: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="12" cy="12" r="10"/%3E%3Cpath d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/%3E%3Cpath d="M2 12h20"/%3E%3C/svg%3E',
+        };
+        const iconUrl = socialIconConfig[platformId];
+        if (iconUrl) {
+          return `<img src="${iconUrl}" alt="${text}" title="${text}" class="inline-block w-5 h-5 mx-1 align-middle" />`;
+        }
+      }
+
       return `<img src="${href}" alt="${text}" title="${title || ""}" />`;
     };
 
