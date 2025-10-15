@@ -339,6 +339,23 @@ Happy editing! 🎉`;
           return `<img src="${iconUrl}" alt="${text}" title="${text}" class="inline-block w-6 h-6 mx-1 align-middle" />`;
         }
       }
+
+      if (href?.startsWith('social-icon://')) {
+        const platformId = href.replace('social-icon://', '');
+        const socialIconConfig: Record<string, string> = {
+          x: 'https://abs.twimg.com/icons/apple-touch-icon-192x192.png',
+          discord: 'https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0a6ca814282eca7172c6_icon_clyde_white_RGB.svg',
+          dev: 'https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png',
+          youtube: 'https://www.youtube.com/s/desktop/d743f786/img/favicon_144x144.png',
+          linkedin: 'https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca',
+          instagram: 'https://static.cdninstagram.com/rsrc.php/v3/yt/r/30PrGfR3xhB.png',
+        };
+        const iconUrl = socialIconConfig[platformId];
+        if (iconUrl) {
+          return `<img src="${iconUrl}" alt="${text}" title="${text}" class="inline-block w-5 h-5 mx-1 align-middle" />`;
+        }
+      }
+
       return `<img src="${href}" alt="${text}" title="${title || ''}" />`;
     };
 

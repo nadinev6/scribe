@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogFooter,
-  DialogTrigger 
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Save } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Save, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -30,6 +31,7 @@ export const SaveDraftDialog = ({
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
   const [internalOpen, setInternalOpen] = useState(false);
+  const [saveMode, setSaveMode] = useState<"new" | "overwrite">("new");
 
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
   const setOpen = controlledOnOpenChange !== undefined ? controlledOnOpenChange : setInternalOpen;
@@ -62,13 +64,18 @@ export const SaveDraftDialog = ({
       if (existingDraft) {
         // Get existing history, ensure it's an array
         let history = Array.isArray(existingDraft.drafts_history) ? existingDraft.drafts_history : [];
-        
-        // Add new entry to the beginning
-        history.unshift(newHistoryEntry);
-        
-        // Limit to 10 entries
-        if (history.length > 10) {
-          history = history.slice(0, 10);
+
+        if (saveMode === "overwrite" && history.length > 0) {
+          // Replace the most recent entry (first in array)
+          history[0] = newHistoryEntry;
+        } else {
+          // Add new entry to the beginning
+          history.unshift(newHistoryEntry);
+
+          // Limit to 10 entries
+          if (history.length > 10) {
+            history = history.slice(0, 10);
+          }
         }
 
         // Update existing draft
@@ -96,8 +103,10 @@ export const SaveDraftDialog = ({
         if (error) throw error;
       }
 
-      toast.success("Draft saved successfully!");
+      const message = saveMode === "overwrite" ? "Draft overwritten successfully!" : "Draft saved successfully!";
+      toast.success(message);
       setNote("");
+      setSaveMode("new");
       setOpen(false);
     } catch (error) {
       console.error("Error saving draft:", error);
@@ -124,6 +133,32 @@ export const SaveDraftDialog = ({
         
         <div className="space-y-4">
           <div>
+            <Label className="text-foreground mb-3 block">Save Mode</Label>
+            <RadioGroup value={saveMode} onValueChange={(value) => setSaveMode(value as "new" | "overwrite")}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="new" id="new" />
+                <Label htmlFor="new" className="font-normal cursor-pointer">
+                  Create new draft entry
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="overwrite" id="overwrite" />
+                <Label htmlFor="overwrite" className="font-normal cursor-pointer">
+                  Overwrite most recent draft
+                </Label>
+              </div>
+            </RadioGroup>
+            <div className="flex items-start gap-2 mt-2 text-xs text-muted-foreground">
+              <Info className="h-3 w-3 mt-0.5 flex-shrink-0" />
+              <p>
+                {saveMode === "new"
+                  ? "A new entry will be added to your history (limit: 10 entries)"
+                  : "The most recent draft entry will be replaced, keeping older entries"}
+              </p>
+            </div>
+          </div>
+
+          <div>
             <Label htmlFor="note" className="text-foreground">Note (Optional)</Label>
             <Input
               id="note"
@@ -132,9 +167,6 @@ export const SaveDraftDialog = ({
               placeholder="Add a note about this version..."
               className="mt-1.5 bg-background text-foreground border-border"
             />
-            <p className="text-xs text-muted-foreground mt-1">
-              This draft will be added to your history (limit: 10 entries)
-            </p>
           </div>
         </div>
 

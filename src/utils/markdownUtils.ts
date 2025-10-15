@@ -257,8 +257,21 @@ export const insertMarkdownFormat = (
       cursorOffset = 11;
       break;
     default:
-      insert = selected;
-      cursorOffset = insert.length;
+      if (format.startsWith('social-')) {
+        const parts = format.split('::');
+        if (parts.length === 2) {
+          const platformId = parts[0].replace('social-', '');
+          const profileUrl = parts[1];
+          insert = `[![${platformId}](social-icon://${platformId})](${profileUrl})`;
+          cursorOffset = insert.length;
+        } else {
+          insert = selected;
+          cursorOffset = insert.length;
+        }
+      } else {
+        insert = selected;
+        cursorOffset = insert.length;
+      }
   }
 
   const newText = before + insert + after;

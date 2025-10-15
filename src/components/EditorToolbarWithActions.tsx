@@ -1,6 +1,7 @@
 import { EditorToolbar } from "./EditorToolbar";
 import { EmojiPicker } from "./EmojiPicker";
 import { GitHubToolsDropdown } from "./GitHubToolsDropdown";
+import { SocialMediaIconsDropdown } from "./SocialMediaIconsDropdown";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +57,7 @@ export const EditorToolbarWithActions = ({
 
       <div className="flex items-center gap-1">
         <GitHubToolsDropdown onFormatClick={onFormatClick} />
+        <SocialMediaIconsDropdown onFormatClick={onFormatClick} />
         <EmojiPicker onEmojiSelect={onEmojiSelect} />
 
         {isAuthenticated ? (
