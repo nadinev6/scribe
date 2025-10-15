@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChevronDown, Share2 } from "lucide-react";
+import { ChevronDown, Share2, Mail, Globe } from "lucide-react";
 
 interface SocialMediaIconsDropdownProps {
   onFormatClick: (format: string) => void;
@@ -33,16 +33,37 @@ const socialPlatforms: SocialPlatform[] = [
   {
     id: "x",
     name: "X (Twitter)",
-    icon: "https://abs.twimg.com/icons/apple-touch-icon-192x192.png",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg",
     placeholder: "username",
     urlPattern: "https://x.com/",
   },
   {
+    id: "email",
+    name: "Email",
+    icon: "lucide:mail",
+    placeholder: "your@email.com",
+    urlPattern: "mailto:",
+  },
+  {
     id: "discord",
     name: "Discord",
-    icon: "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0a6ca814282eca7172c6_icon_clyde_white_RGB.svg",
+    icon: "https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg",
     placeholder: "username#1234 or server invite",
     urlPattern: "https://discord.gg/",
+  },
+  {
+    id: "youtube",
+    name: "YouTube",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg",
+    placeholder: "@channel or channel-id",
+    urlPattern: "https://youtube.com/",
+  },
+  {
+    id: "website",
+    name: "Website",
+    icon: "lucide:globe",
+    placeholder: "https://example.com",
+    urlPattern: "",
   },
   {
     id: "dev",
@@ -50,13 +71,6 @@ const socialPlatforms: SocialPlatform[] = [
     icon: "https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png",
     placeholder: "username",
     urlPattern: "https://dev.to/",
-  },
-  {
-    id: "youtube",
-    name: "YouTube",
-    icon: "https://www.youtube.com/s/desktop/d743f786/img/favicon_144x144.png",
-    placeholder: "@channel or channel-id",
-    urlPattern: "https://youtube.com/",
   },
   {
     id: "linkedin",
@@ -90,7 +104,15 @@ export const SocialMediaIconsDropdown = ({ onFormatClick }: SocialMediaIconsDrop
 
     let profileUrl = profileInput.trim();
 
-    if (!profileUrl.startsWith("http")) {
+    if (selectedPlatform.id === "email") {
+      if (!profileUrl.startsWith("mailto:")) {
+        profileUrl = "mailto:" + profileUrl;
+      }
+    } else if (selectedPlatform.id === "website") {
+      if (!profileUrl.startsWith("http")) {
+        profileUrl = "https://" + profileUrl;
+      }
+    } else if (!profileUrl.startsWith("http")) {
       profileUrl = selectedPlatform.urlPattern + profileUrl.replace(/^@/, "");
     }
 
@@ -129,14 +151,20 @@ export const SocialMediaIconsDropdown = ({ onFormatClick }: SocialMediaIconsDrop
               onClick={() => handlePlatformSelect(platform)}
               className="text-foreground hover:bg-accent cursor-pointer"
             >
-              <img
-                src={platform.icon}
-                alt={platform.name}
-                className="w-4 h-4 mr-2"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
+              {platform.icon === "lucide:mail" ? (
+                <Mail className="w-4 h-4 mr-2" />
+              ) : platform.icon === "lucide:globe" ? (
+                <Globe className="w-4 h-4 mr-2" />
+              ) : (
+                <img
+                  src={platform.icon}
+                  alt={platform.name}
+                  className="w-4 h-4 mr-2"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              )}
               {platform.name}
             </DropdownMenuItem>
           ))}

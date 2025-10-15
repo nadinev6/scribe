@@ -9,7 +9,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { BookOpen, FileText, Award, Shield, Package } from "lucide-react";
+import { Github, FileText, Award, Shield, Package, ChevronDown } from "lucide-react";
 
 interface GitHubToolsDropdownProps {
   onFormatClick: (format: string) => void;
@@ -25,8 +25,8 @@ export const GitHubToolsDropdown = ({ onFormatClick }: GitHubToolsDropdownProps)
           className="hover:bg-primary/10 hover:text-primary"
           title="GitHub Documentation Tools"
         >
-          <BookOpen className="h-4 w-4 mr-1" />
-          GitHub Tools
+          <Github className="h-4 w-4" />
+          <ChevronDown className="h-3 w-3 ml-1" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-card border-border z-50 w-64">
