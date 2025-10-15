@@ -1,0 +1,427 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
+
+    --primary: 0 79% 72%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 6 100% 97%;
+    --secondary-foreground: 0 0% 15%;
+
+    --muted: 6 30% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 6 100% 94%;
+    --accent-foreground: 0 79% 72%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 6 30% 90%;
+    --input: 6 30% 94%;
+    --ring: 0 79% 72%;
+
+    --radius: 0.75rem;
+
+    --editor-bg: 0 0% 100%;
+    --toolbar-bg: 6 100% 97%;
+
+    --gradient-start: 0 0% 98%;
+    --gradient-mid: 6 100% 94%;
+    --gradient-end: 0 79% 72%;
+
+    --gh-gray-50: 0 0% 98%;
+    --gh-gray-100: 0 0% 96%;
+    --gh-gray-200: 0 0% 92%;
+    --gh-gray-300: 0 0% 86%;
+    --gh-gray-400: 0 0% 76%;
+    --gh-gray-500: 0 0% 56%;
+    --gh-gray-600: 0 0% 40%;
+    --gh-gray-700: 0 0% 15%;
+
+    --toc-link-blue: 210 100% 45%;
+    --toc-link-blue-hover: 210 100% 35%;
+  }
+
+  .dark {
+    --background: 0 0% 10%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 0 79% 65%;
+    --primary-foreground: 0 0% 10%;
+
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 16%;
+    --accent-foreground: 0 79% 72%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 0 0% 22%;
+    --input: 0 0% 18%;
+    --ring: 0 79% 65%;
+
+    --editor-bg: 0 0% 14%;
+    --toolbar-bg: 0 0% 13%;
+
+    --gradient-start: 0 0% 10%;
+    --gradient-mid: 0 0% 14%;
+    --gradient-end: 0 79% 25%;
+
+    --gh-gray-50: 0 0% 98%;
+    --gh-gray-100: 0 0% 12%;
+    --gh-gray-200: 0 0% 18%;
+    --gh-gray-300: 0 0% 24%;
+    --gh-gray-400: 0 0% 34%;
+    --gh-gray-500: 0 0% 56%;
+    --gh-gray-600: 0 0% 75%;
+    --gh-gray-700: 0 0% 95%;
+
+    --toc-link-blue: 210 100% 60%;
+    --toc-link-blue-hover: 210 100% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animated-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gradient-start)),
+      hsl(var(--gradient-mid)),
+      hsl(var(--gradient-end))
+    );
+    background-size: 200% 200%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  .table-of-contents {
+    /* Use GitHub-like neutrals for a restrained TOC look */
+    background-color: hsl(var(--gh-gray-100));
+    border: 1px solid hsl(var(--gh-gray-200));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .toc-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: hsl(var(--gh-gray-700));
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-list .toc-list {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .toc-item {
+    margin: 0.5rem 0;
+  }
+
+  .toc-link {
+    color: hsl(var(--toc-link-blue)) !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .toc-link:hover {
+    color: hsl(var(--toc-link-blue-hover)) !important;
+    text-decoration: underline;
+  }
+
+  .table-of-contents a.toc-link {
+    color: hsl(var(--toc-link-blue)) !important;
+  }
+
+  .table-of-contents a.toc-link:hover {
+    color: hsl(var(--toc-link-blue-hover)) !important;
+  }
+
+  .toc-placeholder {
+    background-color: hsl(var(--gh-gray-200));
+    border: 2px dashed hsl(var(--gh-gray-300));
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    color: hsl(var(--gh-gray-600));
+  }
+
+  .prose {
+    color: hsl(var(--foreground));
+    max-width: none;
+  }
+
+  .prose h1 {
+    color: hsl(var(--foreground));
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .prose h2 {
+    color: hsl(var(--foreground));
+    font-size: 1.875rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.875rem;
+    line-height: 1.3;
+  }
+
+  .prose h3 {
+    color: hsl(var(--foreground));
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .prose p {
+    color: hsl(var(--foreground));
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+
+  .prose strong {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+
+  .prose em {
+    color: hsl(var(--foreground));
+    font-style: italic;
+  }
+
+  .prose code {
+    color: hsl(var(--gh-gray-700));
+    background-color: hsl(var(--gh-gray-100));
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .prose pre {
+    background-color: hsl(var(--gh-gray-100));
+    border: 1px solid hsl(var(--gh-gray-200));
+    border-radius: var(--radius);
+    padding: 1rem;
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose pre code {
+    background-color: transparent;
+    padding: 0;
+    color: hsl(var(--gh-gray-700));
+    font-size: 0.875rem;
+  }
+
+  .prose blockquote {
+    border-left: 4px solid hsl(var(--primary));
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .prose ul {
+    list-style-type: disc;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.625rem;
+  }
+
+  .prose ol {
+    list-style-type: decimal;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.625rem;
+  }
+
+  .prose li {
+    color: hsl(var(--foreground));
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.75;
+  }
+
+  .prose ul ul,
+  .prose ol ul {
+    list-style-type: circle;
+  }
+
+  .prose ul ul ul,
+  .prose ol ul ul,
+  .prose ol ol ul {
+    list-style-type: square;
+  }
+
+  .prose a {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+  }
+
+  .prose a:hover {
+    color: hsl(var(--accent-foreground));
+  }
+
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose img[src*="shields.io"],
+  .prose img[src*="img.shields.io"],
+  .prose img[alt*="License"],
+  .prose img[alt*="Build"],
+  .prose img[alt*="Version"],
+  .prose img[alt*="Coverage"],
+  .prose img[alt*="Badge"],
+  .prose img[alt*="React"],
+  .prose img[alt*="TypeScript"],
+  .prose img[alt*="JavaScript"],
+  .prose img[alt*="Vite"],
+  .prose img[alt*="Tailwind"],
+  .prose img[alt*="Node"],
+  .prose img[alt*="Vue"],
+  .prose img[alt*="Angular"],
+  .prose img[alt*="Svelte"],
+  .prose img[alt*="Next"],
+  .prose img[alt*="Webpack"],
+  .prose img[alt*="npm"],
+  .prose img[alt*="Yarn"],
+  .prose img[alt*="pnpm"],
+  .prose img[alt*="Supabase"],
+  .prose img[alt*="PostgreSQL"],
+  .prose img[alt*="MongoDB"],
+  .prose img[alt*="Express"],
+  .prose img[alt*="Bootstrap"],
+  .prose img[alt*="Sass"] {
+    display: inline-block;
+    margin: 0 0.25rem 0 0;
+    vertical-align: middle;
+    border-radius: 0.25rem;
+  }
+
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .prose thead {
+    background-color: hsl(var(--muted));
+  }
+
+  .prose th {
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    border-bottom: 2px solid hsl(var(--border));
+  }
+
+  .prose td {
+    padding: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+
+  .prose tbody tr:nth-child(even) {
+    background-color: hsl(var(--muted) / 0.3);
+  }
+
+  .prose tbody tr:hover {
+    background-color: hsl(var(--muted) / 0.5);
+  }
+
+  .prose hr {
+    border: none;
+    border-top: 1px solid hsl(var(--border));
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .prose del {
+    text-decoration: line-through;
+    color: hsl(var(--muted-foreground));
+  }
+}
